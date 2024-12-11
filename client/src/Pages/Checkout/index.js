@@ -5,13 +5,12 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import { ConfigProvider, Radio } from "antd";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { MyContext } from "../../App";
-import { fetchDataFromApi, postData, deleteData } from "../../utils/api";
+import { fetchDataFromApi, postData } from "../../utils/api";
 
 import { useNavigate } from "react-router-dom";
 
-import { BsCreditCard2BackFill } from "react-icons/bs";
-
 const Checkout = () => {
+  const navigate = useNavigate(); // Khởi tạo điều hướng
   const [formFields, setFormFields] = useState({
     fullName: "",
     country: "",
@@ -120,7 +119,7 @@ const Checkout = () => {
     if (paymentMethod) {
       alert(
         `Bạn đã chọn phương thức thanh toán: ${
-          paymentMethod === "cash"
+          paymentMethod === 0
             ? "Thanh toán khi nhận hàng"
             : "Thanh toán qua Momo"
         }`
@@ -162,20 +161,27 @@ const Checkout = () => {
 
     try {
       // Gửi dữ liệu đơn hàng đến server
-      const response = postData("/api/cart/buyProducts", orderData);
+      if (formFields.paymentMethod !== 0 && formFields.paymentMethod !== 1) {
+        context.setAlertBox({
+          open: true,
+          error: true,
+          msg: "Bạn chưa thanh toán!",
+        });
+      } else {
+        setTimeout(() => {
+          postData("/api/cart/buyProducts", orderData);
+          context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Đặt hàng thành công!",
+          });
 
-      // setCartData(cartResponse);
-      // if (response.success) {
-      //   // Xóa giỏ hàng sau khi đặt hàng thành công
-
-      context.setAlertBox({
-        open: true,
-        error: false,
-        msg: "Đặt hàng thành công!",
-      });
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
+          // Sau 2.5 giây hiển thị thông báo, điều hướng về trang cart
+          setTimeout(() => {
+            navigate("/cart"); // Đường dẫn đến trang giỏ hàng
+          }, 2000); // Thời gian chờ trước khi điều hướng
+        }, 2500);
+      }
 
       //   // Điều hướng đến trang xác nhận đơn hàng
       //   // history("/order-success");
