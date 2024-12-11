@@ -48,6 +48,7 @@ const Orders = () => {
         fetchDataFromApi(`/api/orders/${id}`).then((res) => {
             setIsOpenModal(true);
             setproducts(res.products);
+            console.log(res.products);
         })
     }
 
@@ -81,12 +82,12 @@ const Orders = () => {
                                             <>
                                                 <tr key={index}>
                                                  <td><span className='text-blue fonmt-weight-bold'>{order?.id}</span></td>
-=                                                    <td><span className='text-blue fonmt-weight-bold cursor' onClick={() => showProducts(order?._id)}>Click here to view</span>
+                                                    <td><span className='text-blue fonmt-weight-bold cursor' onClick={() => showProducts(order?._id)}>Click here to view</span>
                                                     </td>
                                                     <td>{order?.name}</td>
                                                     <td>{order?.phoneNumber}</td>
                                                     <td>{order?.address}</td>
-                                                    <td>{order?.amount}</td>
+                                                    <td>{order?.totalMoney}</td> 
                                                     <td>{order?.email}</td>
                                                     <td>
                                                         {order?.status === "pending" ?
@@ -138,17 +139,17 @@ const Orders = () => {
                                 products?.length !== 0 && products?.map((item, index) => {
                                     return (
                                         <tr>
-                                            <td>{item?.productId}</td>
+                                            <td>{item?.product.id}</td>
                                             <td  style={{whiteSpace:"inherit"}}><span>
-                                                {item?.productTitle?.substr(0,30)+'...'}
+                                                {item?.product.productTitle?.substr(0,30)+'...'}
                                             </span></td>
                                             <td>
                                                 <div className='img'>
-                                                    <img src={item?.image} />
+                                                    <img src={item?.product.image} />
                                                 </div>
                                             </td>
                                             <td>{item?.quantity}</td>
-                                            <td>{item?.price}</td>
+                                            <td>{item?.product.price}</td>
                                             <td>{item?.subTotal}</td>
                                         </tr>
                                     )

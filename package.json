@@ -1,0 +1,11 @@
+{
+  "name": "smartfood-foodadvisor",
+  "version": "1.0.0",
+  "description": "- server\r B1: npm i để install các gói\r B2: nodemon để connect database\r => hiển thị \"Database Connection is ready...\" tức là connect thành công",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
